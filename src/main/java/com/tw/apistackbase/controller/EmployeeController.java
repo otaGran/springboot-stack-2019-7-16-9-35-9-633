@@ -1,5 +1,8 @@
 package com.tw.apistackbase.controller;
 
+import com.tw.apistackbase.Employee;
+import com.tw.apistackbase.EmployeeRespository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,7 +12,9 @@ import java.util.Optional;
 
 @RestController
 public class EmployeeController {
-    private List<Employee> employees = new ArrayList<>();
+    //private List<Employee> employees = new ArrayList<>();
+    @Autowired
+    private EmployeeRespository employees;
     @PostMapping("/employees")
     public ResponseEntity createEmployee(@RequestBody Employee employee){
         employee.setID(1);
@@ -18,12 +23,13 @@ public class EmployeeController {
     }
     @GetMapping("/employees")
     public ResponseEntity getEmployees(){
-        return ResponseEntity.ok(employees);
+        System.out.println("ssss" + employees.getEmployees().size());
+        return ResponseEntity.ok(employees.getEmployees());
     }
 
     @PutMapping("/employees/{id}")
     public ResponseEntity updateEmployees(@PathVariable long id,@RequestBody Employee employee){
-        Employee originEmployee = employees
+        Employee originEmployee = employees.getEmployees()
                 .stream()
                 .filter(v->v.getID()==id)
                 .findFirst()

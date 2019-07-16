@@ -55,4 +55,28 @@ public class EmployeeControllerTest {
                         "    }\n" +
                         "]"));
     }
+
+    @Test
+    public void should_return_specify_employee_when_requesta_certain_specific_employee_api() throws Exception{
+        List<Employee> mockList = new ArrayList<>();
+        mockList.add(new Employee("Alexander", 18, "male",1L));
+        mockList.add(new Employee("Eric", 19, "male",2L));
+        mockList.add(new Employee("William", 22, "male",3L));
+
+        Mockito.when(mockEmployeeRespository.getEmployees()).thenReturn(mockList);
+
+        System.out.println(mockEmployeeRespository.getSpecifyEmployee().size());
+
+        mockMvc.perform(get("/employees/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().json("[\n" +
+                        "    {\n" +
+                        "        \"name\": \"Alexander\",\n" +
+                        "        \"age\": 18,\n" +
+                        "        \"gender\": \"male\",\n" +
+                        "        \"id\": 1\n" +
+                        "    }\n" +
+                        "]"));
+    }
 }

@@ -13,11 +13,22 @@ import java.util.List;
 
 public class EmployeeRespository {
 
-    @Autowired
-    private List<Employee> employees;
+    private final List<Employee> employees = new ArrayList<>();
+
+
 
     public void add(Employee employee) {
         this.employees.add(employee);
+    }
+
+    public Employee findById(Long ID){
+        Employee employee = employees.stream()
+                .filter(v -> ID == v.getID())
+                .findFirst()
+                .orElse(null);
+
+
+        return  employee;
     }
 
     public List<Employee> getEmployees(){

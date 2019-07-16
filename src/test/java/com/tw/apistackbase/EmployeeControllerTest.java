@@ -63,20 +63,15 @@ public class EmployeeControllerTest {
         mockList.add(new Employee("Eric", 19, "male",2L));
         mockList.add(new Employee("William", 22, "male",3L));
 
-        Mockito.when(mockEmployeeRespository.getEmployees()).thenReturn(mockList);
-
-        System.out.println(mockEmployeeRespository.getSpecifyEmployee().size());
-
+        Mockito.when(mockEmployeeRespository.findById(1L)).thenReturn(mockList.get(0));
         mockMvc.perform(get("/employees/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().json("[\n" +
-                        "    {\n" +
-                        "        \"name\": \"Alexander\",\n" +
-                        "        \"age\": 18,\n" +
-                        "        \"gender\": \"male\",\n" +
-                        "        \"id\": 1\n" +
-                        "    }\n" +
-                        "]"));
+                .andExpect(content().json("{\n" +
+                        "    \"name\": \"Alexander\",\n" +
+                        "    \"age\": 18,\n" +
+                        "    \"gender\": \"male\",\n" +
+                        "    \"id\": 1\n" +
+                        "}"));
     }
 }

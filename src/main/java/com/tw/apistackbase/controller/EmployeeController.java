@@ -23,9 +23,14 @@ public class EmployeeController {
     }
     @GetMapping("/employees")
     public ResponseEntity getEmployees(){
-        System.out.println("ssss" + employees.getEmployees().size());
         return ResponseEntity.ok(employees.getEmployees());
     }
+
+    @GetMapping("/employees/{id}")
+    public ResponseEntity getSpecifyEmployee(PathVariable String id) {
+        return ResponseEntity.ok(employees.findById(id));
+    }
+
 
     @PutMapping("/employees/{id}")
     public ResponseEntity updateEmployees(@PathVariable long id,@RequestBody Employee employee){

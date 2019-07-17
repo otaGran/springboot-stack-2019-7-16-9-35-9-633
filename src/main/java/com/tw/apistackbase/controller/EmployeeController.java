@@ -15,15 +15,24 @@ public class EmployeeController {
     //private List<Employee> employees = new ArrayList<>();
     @Autowired
     private EmployeeRespository employees;
+
+
     @PostMapping("/employees")
     public ResponseEntity createEmployee(@RequestBody Employee employee){
-        employee.setID(1);
-        employees.add(employee);
-        return ResponseEntity.ok(employee);
+        return ResponseEntity.ok(employees.save(employee));
     }
+
+
+
+
     @GetMapping("/employees")
-    public ResponseEntity getEmployees(){
-        return ResponseEntity.ok(employees.getEmployees());
+    public ResponseEntity getEmployees(@RequestParam(value = "page",defaultValue = "0")int page,
+                                       @RequestParam(value = "pageSize",defaultValue = "0")int pageSize,
+                                       @RequestParam(value = "name",defaultValue = "")String name){
+
+        if(page==0 || pageSize==0)
+            return ResponseEntity.ok(employees.findAll());
+        return ResponseEntity.ok(employees.findAll().subList((page-1)*pageSize,page*pageSize));
     }
 
     @GetMapping("/employees/{id}")
@@ -33,19 +42,9 @@ public class EmployeeController {
 
 
     @PutMapping("/employees/{id}")
-    public ResponseEntity updateEmployees(@PathVariable long id,@RequestBody Employee employee){
-        Employee originEmployee = employees.getEmployees()
-                .stream()
-                .filter(v->v.getID()==id)
-                .findFirst()
-                .orElse(null);
-
-        if (originEmployee != null){
-            originEmployee.setID(employee.getID());
-
-            return ResponseEntity.ok(employee);
-        }
-
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<Employee> updateEmployees(@PathVariable long id,@RequestBody Employee employee){
+        int result = employees.updateEmployeeById(employee,id);
+        Employee byId = employees.findById(id).orElse(null);
+        return ResponseEntity.ok(byId);
     }
 }
